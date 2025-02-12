@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Settings</title>
+    <title>CIVCON drafter</title>
     <style>
         body {
             background-color: #1E1E1E;
@@ -14,9 +14,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: auto;
         }
-        .container {
+        \.container \{
+    position: sticky;
+    top: 0;
+    background-color: #2D2D2D;
+    z-index: 1000;
             width: 550px;
             background-color: #2D2D2D;
             padding: 20px;
@@ -66,10 +70,9 @@
             margin: 0 0 10px;
         }
         .leader {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            margin-left: 20px;
-            margin-bottom: 5px;
+            margin-right: 15px;
         }
         .leader img {
             width: 50px;
@@ -77,16 +80,24 @@
             margin-right: 10px;
             border-radius: 50%;
         }
+        .leader span.separator {
+            margin-left: 10px;
+            margin-right: 10px;
+            border-left: 2px solid #555;
+            height: 50px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>CIVCON civ7drafter</h1>
+        <h1>Game Settings</h1>
         <label for="numPlayers">Number of players (1-8):</label>
-        <input type="range" id="numPlayers" name="numPlayers" min="1" max="8" value="1">
+        <input type="range" id="numPlayers" name="numPlayers" min="1" max="8" value="1" oninput="updatePlayerValue()">
+        <div id="numPlayersValue" style="text-align:center; margin-top:5px; font-size:14px;">1</div>
 
         <label for="numLeaders">Number of leaders (1-6):</label>
-        <input type="range" id="numLeaders" name="numLeaders" min="1" max="6" value="1">
+        <input type="range" id="numLeaders" name="numLeaders" min="1" max="6" value="1" oninput="updateLeaderValue()">
+        <div id="numLeadersValue" style="text-align:center; margin-top:5px; font-size:14px;">1</div>
 
         <label>
             <input type="checkbox" id="allowDuplicates"> Allow duplicate leaders
@@ -100,7 +111,7 @@
     <script>
         const leadersCiv7 = {
             "Amina": "https://static.wikia.nocookie.net/civilization/images/d/d8/Amina_%28Civ7%29.png",
-            "Ashoka, World Conqueror": "https://static.wikia.nocookie.net/civilization/images/1/19/Ashoka%2C_World_Renouncer_%28Civ7%29.png",
+            "Ashoka, World Conqueror": "https://static.wikia.nocookie.net/civilization/images/1/19/Ashoka%2C_World_Conqueror_%28Civ7%29.png",
             "Ashoka, World Renouncer": "https://static.wikia.nocookie.net/civilization/images/b/b2/Ashoka%2C_World_Renouncer_%28Civ7%29.png",
             "Augustus": "https://static.wikia.nocookie.net/civilization/images/9/99/Augustus_%28Civ7%29.png",
             "Benjamin Franklin": "https://static.wikia.nocookie.net/civilization/images/4/4c/Benjamin_Franklin_%28Civ7%29.png",
@@ -181,6 +192,16 @@
 
                 resultsDiv.appendChild(playerDiv);
             }
+        }
+
+        function updatePlayerValue() {
+            const numPlayers = document.getElementById('numPlayers').value;
+            document.getElementById('numPlayersValue').textContent = numPlayers;
+        }
+
+        function updateLeaderValue() {
+            const numLeaders = document.getElementById('numLeaders').value;
+            document.getElementById('numLeadersValue').textContent = numLeaders;
         }
     </script>
 </body>
