@@ -95,6 +95,7 @@
           display: flex;
           justify-content: center;
           align-items: center;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
       }
       .round-button:hover {
           background-color: #005F99;
@@ -290,9 +291,9 @@
 
       // Kopiuje ramkę wyników do schowka jako PNG
       function copyResults() {
-          const resultsContainer = document.getElementById('resultsContainer');
+          const results = document.getElementById('results');
 
-          html2canvas(resultsContainer, { useCORS: true }).then(canvas => {
+          html2canvas(results, { useCORS: true }).then(canvas => {
               canvas.toBlob(blob => {
                   const item = new ClipboardItem({ 'image/png': blob });
                   navigator.clipboard.write([item])
