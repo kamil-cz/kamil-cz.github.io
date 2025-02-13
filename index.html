@@ -26,8 +26,9 @@
           max-width: 750px;
           width: 100%;
           margin: 0 auto;
-          padding: 10px;
+          padding: 20px;
           border-radius: 30px;
+          
       }
 
       h1 {
@@ -39,9 +40,9 @@
       /* Ramka wokół sekcji z parametrami */
       .parameters-box {
           border: 2px solid rgba(255,255,255,0.2);
-          background-color: #2D2D2D;
           border-radius: 20px;
-          padding: 20px;
+          background-color: #00253D;
+          padding: 15px;
           margin-bottom: 20px;
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
       }
@@ -53,8 +54,8 @@
       }
 
       .slider-row label {
-          font-size: 16px;
-          margin-bottom: 10px;
+          font-size: 14px;
+          margin-bottom: 5px;
       }
 
       input[type=checkbox] {
@@ -68,6 +69,7 @@
           border: none;
           padding: 10px 20px;
           font-size: 20px;
+          width: 100%;
           cursor: pointer;
           /* Lewy i prawy bok półkola (pill shape) */
           border-top-left-radius: 9999px;
@@ -80,6 +82,25 @@
           background-color: #005F99;
       }
 
+      /* Przyciski 2 */
+      .round-button {
+          width: 60px;
+          height: 60px;
+          background-color: #007ACC;
+          color: white;
+          border: none;
+          border-radius: 50%;
+          font-size: 16px;
+          cursor: pointer;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+      }
+      .round-button:hover {
+          background-color: #005F99;
+      }
+   
+    
       /* Ramka na wyniki (generowana dynamicznie) */
       .results-box {
           border: 2px solid rgba(255,255,255,0.2);
@@ -153,13 +174,15 @@
         <div style="position: relative; text-align: center; margin-top: 20px;">
           <!-- Generate! w centrum -->
           <button class="button" onclick="showResults()" style="margin: 0 auto; display: inline-block;">Generate!</button>
-          <!-- Copy results w prawym górnym rogu, wyświetlany po kliknięciu -->
-          <button class="button" id="copyButton" style="display: none; position: absolute; top: 0; right: 0;" onclick="copyResults()">Copy results</button>
         </div>
       </div>
 
       <!-- Kontener na wyniki (druga ramka) -->
       <div id="resultsContainer" class="results-box" style="display: none;">
+          <div style="position: relative; text-align: center; margin-top: 0px;">
+            <!-- Copy results w prawym górnym rogu, wyświetlany po kliknięciu -->
+            <button class="round-button" id="copyButton" style="display: none; position: absolute; top: -10px; right: -10px;" onclick="copyResults()">Copy</button>
+          </div>
           <div id="results"></div>
       </div>
   </div>
