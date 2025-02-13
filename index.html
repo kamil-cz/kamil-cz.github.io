@@ -1,208 +1,297 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CIVCON civ7drafter</title>
-    <style>
-        body {
-            background-color: #1E1E1E;
-            color: #FFFFFF;
-            font-family: 'Verdana', sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: auto;
-        }
-        \.container \{
-    position: sticky;
-    top: 0;
-    background-color: #2D2D2D;
-    z-index: 1000;
-            width: 550px;
-            background-color: #2D2D2D;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-        }
-        h1 {
-            text-align: center;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        label {
-            font-size: 14px;
-            margin: 10px 0 5px;
-            display: block;
-        }
-        input[type=range] {
-            width: 100%;
-        }
-        input[type=checkbox] {
-            margin-right: 10px;
-        }
-        .button {
-            background-color: #007ACC;
-            color: #FFFFFF;
-            border: none;
-            padding: 10px 20px;
-            font-size: 14px;
-            border-radius: 5px;
-            cursor: pointer;
-            display: block;
-            margin: 20px auto 0;
-        }
-        .button:hover {
-            background-color: #005F99;
-        }
-        .results {
-            margin-top: 20px;
-        }
-        .player {
-            margin-bottom: 15px;
-            padding: 10px;
-            background-color: #3A3A3A;
-            border-radius: 5px;
-        }
-        .player h3 {
-            margin: 0 0 10px;
-        }
-        .leader {
-            display: inline-flex;
-            align-items: center;
-            margin-right: 15px;
-        }
-        .leader img {
-            width: 50px;
-            height: 50px;
-            margin-right: 10px;
-            border-radius: 50%;
-        }
-        .leader span.separator {
-            margin-left: 10px;
-            margin-right: 10px;
-            border-left: 2px solid #555;
-            height: 50px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CIVCON civ7drafter</title>
+  <!-- Dodajemy html2canvas z CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <style>
+      body {
+          background-color: #1E1E1E;
+          color: #FFFFFF;
+          font-family: 'Verdana', sans-serif;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 100vh;
+      }
+
+      .container {
+          position: sticky;
+          top: 0;
+          background-color: #2D2D2D;
+          z-index: 1000;
+          max-width: 750px;
+          width: 100%;
+          margin: 0 auto;
+          padding: 30px;
+          border-radius: 30px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+      }
+
+      h1 {
+          text-align: center;
+          font-size: 24px;
+          margin-bottom: 20px;
+      }
+
+      /* Ramka wokół sekcji z parametrami */
+      .parameters-box {
+          border: 2px solid rgba(255,255,255,0.2);
+          border-radius: 20px;
+          padding: 20px;
+          margin-bottom: 20px;
+      }
+
+      .slider-row {
+          display: flex;
+          flex-direction: column;
+          margin-bottom: 15px;
+      }
+
+      .slider-row label {
+          font-size: 14px;
+          margin-bottom: 5px;
+      }
+
+      input[type=checkbox] {
+          margin-right: 10px;
+      }
+
+      /* Przyciski o zaokrąglonych bokach (półkole) */
+      .button {
+          background-color: #007ACC;
+          color: #FFFFFF;
+          border: none;
+          padding: 10px 20px;
+          font-size: 14px;
+          cursor: pointer;
+          /* Lewy i prawy bok półkola (pill shape) */
+          border-top-left-radius: 9999px;
+          border-bottom-left-radius: 9999px;
+          border-top-right-radius: 9999px;
+          border-bottom-right-radius: 9999px;
+      }
+
+      .button:hover {
+          background-color: #005F99;
+      }
+
+      /* Ramka na wyniki (generowana dynamicznie) */
+      .results-box {
+          border: 2px solid rgba(255,255,255,0.2);
+          border-radius: 20px;
+          padding: 20px;
+          margin-top: 20px;
+          position: relative;
+      }
+
+      .player {
+          margin-bottom: 15px;
+          padding: 10px;
+          background-color: #3A3A3A;
+          border-radius: 5px;
+      }
+
+      .player h3 {
+          margin: 0 0 10px;
+      }
+
+      .leader {
+          display: inline-flex;
+          align-items: center;
+          margin-right: 15px;
+      }
+
+      .leader img {
+          width: 50px;
+          height: 50px;
+          margin-right: 10px;
+          border-radius: 50%;
+      }
+
+      .leader span.separator {
+          margin-left: 10px;
+          margin-right: 10px;
+          border-left: 2px solid #555;
+          height: 50px;
+      }
+
+      input[type=range] {
+          width: 100%;
+      }
+
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>CIVCON civ7drafter</h1>
-        <label for="numPlayers">Number of players (1-8):</label>
-        <input type="range" id="numPlayers" name="numPlayers" min="1" max="8" value="1" oninput="updatePlayerValue()">
-        <div id="numPlayersValue" style="text-align:center; margin-top:5px; font-size:14px;">1</div>
+  <div class="container">
+      <h1>CIV7 drafter</h1>
 
-        <label for="numLeaders">Number of leaders (1-6):</label>
-        <input type="range" id="numLeaders" name="numLeaders" min="1" max="6" value="1" oninput="updateLeaderValue()">
-        <div id="numLeadersValue" style="text-align:center; margin-top:5px; font-size:14px;">1</div>
-
+      <!-- Ramka z parametrami -->
+      <div class="parameters-box">
+        <!-- Suwaki -->
+        <div class="slider-row">
+          <label for="numPlayers">
+            Number of players: <span id="numPlayersValue">1</span>
+          </label>
+          <input type="range" id="numPlayers" name="numPlayers" min="1" max="8" value="1" oninput="updatePlayerValue()">
+        </div>
+        <div class="slider-row">
+          <label for="numLeaders">
+            Number of leaders: <span id="numLeadersValue">1</span>
+          </label>
+          <input type="range" id="numLeaders" name="numLeaders" min="1" max="6" value="1" oninput="updateLeaderValue()">
+        </div>
         <label>
             <input type="checkbox" id="allowDuplicates"> Allow duplicate leaders
         </label>
 
-        <button class="button" onclick="showResults()">Confirm</button>
+        <!-- Kontener na przyciski, w jednej linii, z 'Generate!' wycentrowanym, 'Copy results' w prawym rogu -->
+        <div style="position: relative; text-align: center; margin-top: 20px;">
+          <!-- Generate! w centrum -->
+          <button class="button" onclick="showResults()" style="margin: 0 auto; display: inline-block;">Generate!</button>
+          <!-- Copy results w prawym górnym rogu, wyświetlany po kliknięciu -->
+          <button class="button" id="copyButton" style="display: none; position: absolute; top: 0; right: 0;" onclick="copyResults()">Copy results</button>
+        </div>
+      </div>
 
-        <div class="results" id="results"></div>
-    </div>
+      <!-- Kontener na wyniki (druga ramka) -->
+      <div id="resultsContainer" class="results-box" style="display: none;">
+          <div id="results"></div>
+      </div>
+  </div>
 
-    <script>
-        const leadersCiv7 = {
-            "Amina": "https://static.wikia.nocookie.net/civilization/images/d/d8/Amina_%28Civ7%29.png",
-            "Ashoka, World Conqueror": "https://static.wikia.nocookie.net/civilization/images/1/19/Ashoka%2C_World_Conqueror_%28Civ7%29.png",
-            "Ashoka, World Renouncer": "https://static.wikia.nocookie.net/civilization/images/b/b2/Ashoka%2C_World_Renouncer_%28Civ7%29.png",
-            "Augustus": "https://static.wikia.nocookie.net/civilization/images/9/99/Augustus_%28Civ7%29.png",
-            "Benjamin Franklin": "https://static.wikia.nocookie.net/civilization/images/4/4c/Benjamin_Franklin_%28Civ7%29.png",
-            "Catherine the Great": "https://static.wikia.nocookie.net/civilization/images/c/c5/Catherine_the_Great_%28Civ7%29.png",
-            "Charlemagne": "https://static.wikia.nocookie.net/civilization/images/d/dd/Charlemagne_%28Civ7%29.png",
-            "Confucius": "https://static.wikia.nocookie.net/civilization/images/c/c4/Confucius_%28Civ7%29.png",
-            "Friedrich, Baroque": "https://static.wikia.nocookie.net/civilization/images/6/60/Friedrich%2C_Baroque_%28Civ7%29.png",
-            "Friedrich, Oblique": "https://static.wikia.nocookie.net/civilization/images/5/5f/Friedrich%2C_Oblique_%28Civ7%29.png",
-            "Harriet Tubman": "https://static.wikia.nocookie.net/civilization/images/c/cf/Harriet_Tubman_%28Civ7%29.png",
-            "Hatshepsut": "https://static.wikia.nocookie.net/civilization/images/0/05/Hatshepsut_%28Civ7%29.png",
-            "Himiko, High Shaman": "https://static.wikia.nocookie.net/civilization/images/1/15/Himiko%2C_High_Shaman_%28Civ7%29.png",
-            "Himiko, Queen of Wa": "https://static.wikia.nocookie.net/civilization/images/a/af/Himiko%2C_Queen_of_Wa_%28Civ7%29.png",
-            "Ibn Battuta": "https://static.wikia.nocookie.net/civilization/images/2/27/Ibn_Battuta_%28Civ7%29.png",
-            "Isabella": "https://static.wikia.nocookie.net/civilization/images/b/b3/Isabella_%28Civ7%29.png",
-            "José Rizal": "https://static.wikia.nocookie.net/civilization/images/e/ea/Jos%C3%A9_Rizal_%28Civ7%29.png",
-            "Lafayette": "https://static.wikia.nocookie.net/civilization/images/8/82/Lafayette_%28Civ7%29.png",
-            "Napoleon, Emperor": "https://static.wikia.nocookie.net/civilization/images/f/ff/Napoleon%2C_Emperor_%28Civ7%29.png",
-            "Napoleon, Revolutionary": "https://static.wikia.nocookie.net/civilization/images/4/4b/Napoleon%2C_Revolutionary_%28Civ7%29.png",
-            "Machiavelli": "https://static.wikia.nocookie.net/civilization/images/6/6b/Machiavelli_%28Civ7%29.png",
-            "Pachacuti": "https://static.wikia.nocookie.net/civilization/images/5/5f/Pachacuti_%28Civ7%29.png",
-            "Tecumseh": "https://static.wikia.nocookie.net/civilization/images/0/08/Tecumseh_%28Civ7%29.png",
-            "Trung Trac": "https://static.wikia.nocookie.net/civilization/images/2/2e/Trung_Trac_%28Civ7%29.png",
-            "Xerxes, King of Kings": "https://static.wikia.nocookie.net/civilization/images/3/36/Xerxes%2C_King_of_Kings_%28Civ7%29.png",
-            "Xerxes, The Achaemenid": "https://static.wikia.nocookie.net/civilization/images/d/d5/Xerxes%2C_the_Achaemenid_%28Civ7%29.png"
-        };
+  <script>
+      const leadersCiv7 = {
+          "Amina": "https://static.wikia.nocookie.net/civilization/images/d/d8/Amina_%28Civ7%29.png",
+          "Ashoka, World Conqueror": "https://static.wikia.nocookie.net/civilization/images/1/19/Ashoka%2C_World_Conqueror_%28Civ7%29.png",
+          "Ashoka, World Renouncer": "https://static.wikia.nocookie.net/civilization/images/b/b2/Ashoka%2C_World_Renouncer_%28Civ7%29.png",
+          "Augustus": "https://static.wikia.nocookie.net/civilization/images/9/99/Augustus_%28Civ7%29.png",
+          "Benjamin Franklin": "https://static.wikia.nocookie.net/civilization/images/4/4c/Benjamin_Franklin_%28Civ7%29.png",
+          "Catherine the Great": "https://static.wikia.nocookie.net/civilization/images/c/c5/Catherine_the_Great_%28Civ7%29.png",
+          "Charlemagne": "https://static.wikia.nocookie.net/civilization/images/d/dd/Charlemagne_%28Civ7%29.png",
+          "Confucius": "https://static.wikia.nocookie.net/civilization/images/c/c4/Confucius_%28Civ7%29.png",
+          "Friedrich, Baroque": "https://static.wikia.nocookie.net/civilization/images/6/60/Friedrich%2C_Baroque_%28Civ7%29.png",
+          "Friedrich, Oblique": "https://static.wikia.nocookie.net/civilization/images/5/5f/Friedrich%2C_Oblique_%28Civ7%29.png",
+          "Harriet Tubman": "https://static.wikia.nocookie.net/civilization/images/c/cf/Harriet_Tubman_%28Civ7%29.png",
+          "Hatshepsut": "https://static.wikia.nocookie.net/civilization/images/0/05/Hatshepsut_%28Civ7%29.png",
+          "Himiko, High Shaman": "https://static.wikia.nocookie.net/civilization/images/1/15/Himiko%2C_High_Shaman_%28Civ7%29.png",
+          "Himiko, Queen of Wa": "https://static.wikia.nocookie.net/civilization/images/a/af/Himiko%2C_Queen_of_Wa_%28Civ7%29.png",
+          "Ibn Battuta": "https://static.wikia.nocookie.net/civilization/images/2/27/Ibn_Battuta_%28Civ7%29.png",
+          "Isabella": "https://static.wikia.nocookie.net/civilization/images/b/b3/Isabella_%28Civ7%29.png",
+          "José Rizal": "https://static.wikia.nocookie.net/civilization/images/e/ea/Jos%C3%A9_Rizal_%28Civ7%29.png",
+          "Lafayette": "https://static.wikia.nocookie.net/civilization/images/8/82/Lafayette_%28Civ7%29.png",
+          "Napoleon, Emperor": "https://static.wikia.nocookie.net/civilization/images/f/ff/Napoleon%2C_Emperor_%28Civ7%29.png",
+          "Napoleon, Revolutionary": "https://static.wikia.nocookie.net/civilization/images/4/4b/Napoleon%2C_Revolutionary_%28Civ7%29.png",
+          "Machiavelli": "https://static.wikia.nocookie.net/civilization/images/6/6b/Machiavelli_%28Civ7%29.png",
+          "Pachacuti": "https://static.wikia.nocookie.net/civilization/images/5/5f/Pachacuti_%28Civ7%29.png",
+          "Tecumseh": "https://static.wikia.nocookie.net/civilization/images/0/08/Tecumseh_%28Civ7%29.png",
+          "Trung Trac": "https://static.wikia.nocookie.net/civilization/images/2/2e/Trung_Trac_%28Civ7%29.png",
+          "Xerxes, King of Kings": "https://static.wikia.nocookie.net/civilization/images/3/36/Xerxes%2C_King_of_Kings_%28Civ7%29.png",
+          "Xerxes, The Achaemenid": "https://static.wikia.nocookie.net/civilization/images/d/d5/Xerxes%2C_the_Achaemenid_%28Civ7%29.png"
+      };
 
-        function getRandomLeaders(num, allowDuplicates, availableLeaders) {
-            const selectedLeaders = [];
-            for (let i = 0; i < num; i++) {
-                const randomIndex = Math.floor(Math.random() * availableLeaders.length);
-                selectedLeaders.push(availableLeaders[randomIndex]);
-                if (!allowDuplicates) {
-                    availableLeaders.splice(randomIndex, 1);
-                }
-            }
-            return selectedLeaders;
-        }
+      // Generuje listę liderów
+      function getRandomLeaders(num, allowDuplicates, availableLeaders) {
+          const selectedLeaders = [];
+          for (let i = 0; i < num; i++) {
+              const randomIndex = Math.floor(Math.random() * availableLeaders.length);
+              selectedLeaders.push(availableLeaders[randomIndex]);
+              if (!allowDuplicates) {
+                  availableLeaders.splice(randomIndex, 1);
+              }
+          }
+          return selectedLeaders;
+      }
 
-        function showResults() {
-            const numPlayers = document.getElementById('numPlayers').value;
-            const numLeaders = document.getElementById('numLeaders').value;
-            const allowDuplicates = document.getElementById('allowDuplicates').checked;
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '';
+      // Tworzy i wyświetla wyniki
+      function showResults() {
+          const numPlayers = document.getElementById('numPlayers').value;
+          const numLeaders = document.getElementById('numLeaders').value;
+          const allowDuplicates = document.getElementById('allowDuplicates').checked;
+          const resultsDiv = document.getElementById('results');
+          const resultsContainer = document.getElementById('resultsContainer');
+          const copyBtn = document.getElementById('copyButton');
 
-            if (!allowDuplicates && numPlayers * numLeaders > Object.keys(leadersCiv7).length) {
-                alert('Not enough unique leaders available for the selected settings.');
-                return;
-            }
+          resultsDiv.innerHTML = '';
 
-            let availableLeaders = Object.keys(leadersCiv7);
+          // Pokaż ramkę na wyniki
+          resultsContainer.style.display = 'block';
 
-            for (let i = 1; i <= numPlayers; i++) {
-                const playerDiv = document.createElement('div');
-                playerDiv.className = 'player';
-                const playerHeader = document.createElement('h3');
-                playerHeader.textContent = `Civhead ${i}`;
-                playerDiv.appendChild(playerHeader);
+          // Sprawdzenie, czy mamy wystarczająco unikalnych liderów
+          if (!allowDuplicates && numPlayers * numLeaders > Object.keys(leadersCiv7).length) {
+              alert('Not enough unique leaders available for the selected settings.');
+              return;
+          }
 
-                const selectedLeaders = getRandomLeaders(numLeaders, allowDuplicates, availableLeaders);
+          // Pokaż przycisk Copy, skoro mamy jakieś wyniki
+          copyBtn.style.display = 'inline-block';
 
-                selectedLeaders.forEach(leader => {
-                    const leaderDiv = document.createElement('div');
-                    leaderDiv.className = 'leader';
+          let availableLeaders = Object.keys(leadersCiv7);
 
-                    const leaderImg = document.createElement('img');
-                    leaderImg.src = leadersCiv7[leader];
-                    leaderImg.alt = leader;
+          // Tworzymy graczy
+          for (let i = 1; i <= numPlayers; i++) {
+              const playerDiv = document.createElement('div');
+              playerDiv.className = 'player';
 
-                    const leaderText = document.createElement('span');
-                    leaderText.textContent = leader;
+              const playerHeader = document.createElement('h3');
+              playerHeader.textContent = `Civhead ${i}`;
+              playerDiv.appendChild(playerHeader);
 
-                    leaderDiv.appendChild(leaderImg);
-                    leaderDiv.appendChild(leaderText);
+              const selectedLeaders = getRandomLeaders(numLeaders, allowDuplicates, availableLeaders);
 
-                    playerDiv.appendChild(leaderDiv);
-                });
+              selectedLeaders.forEach(leader => {
+                  const leaderDiv = document.createElement('div');
+                  leaderDiv.className = 'leader';
 
-                resultsDiv.appendChild(playerDiv);
-            }
-        }
+                  const leaderImg = document.createElement('img');
+                  leaderImg.crossOrigin = 'anonymous';
+                  leaderImg.src = leadersCiv7[leader];
+                  leaderImg.alt = leader;
 
-        function updatePlayerValue() {
-            const numPlayers = document.getElementById('numPlayers').value;
-            document.getElementById('numPlayersValue').textContent = numPlayers;
-        }
+                  const leaderText = document.createElement('span');
+                  leaderText.textContent = leader;
 
-        function updateLeaderValue() {
-            const numLeaders = document.getElementById('numLeaders').value;
-            document.getElementById('numLeadersValue').textContent = numLeaders;
-        }
-    </script>
+                  leaderDiv.appendChild(leaderImg);
+                  leaderDiv.appendChild(leaderText);
+
+                  playerDiv.appendChild(leaderDiv);
+              });
+
+              resultsDiv.appendChild(playerDiv);
+          }
+      }
+
+      // Kopiuje ramkę wyników do schowka jako PNG
+      function copyResults() {
+          const resultsContainer = document.getElementById('resultsContainer');
+
+          html2canvas(resultsContainer, { useCORS: true }).then(canvas => {
+              canvas.toBlob(blob => {
+                  const item = new ClipboardItem({ 'image/png': blob });
+                  navigator.clipboard.write([item])
+                    .then(() => {
+                      alert('Screenshot copied to clipboard as PNG!');
+                    })
+                    .catch(err => {
+                      console.error('Failed to copy: ', err);
+                    });
+              }, 'image/png');
+          });
+      }
+
+      function updatePlayerValue() {
+          const numPlayers = document.getElementById('numPlayers').value;
+          document.getElementById('numPlayersValue').textContent = numPlayers;
+      }
+
+      function updateLeaderValue() {
+          const numLeaders = document.getElementById('numLeaders').value;
+          document.getElementById('numLeadersValue').textContent = numLeaders;
+      }
+  </script>
 </body>
 </html>
