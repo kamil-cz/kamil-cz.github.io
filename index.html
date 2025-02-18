@@ -34,6 +34,7 @@
       h1 {
           text-align: center;
           font-size: 24px;
+          text-shadow: 2px 2px 4px #007ACC;
           margin-bottom: 20px;
       }
 
@@ -187,9 +188,12 @@
           </label>
           <input type="range" id="numLeaders" name="numLeaders" min="1" max="6" value="1" oninput="updateLeaderValue()">
         </div>
-        <label>
-            <input type="checkbox" id="allowDuplicates"> Allow duplicate leaders
-        </label>
+          <label style="display: block;">--- LEADERS ---</label>
+          <label style="display: block;"><input type="checkbox" id="baseLeaders" checked disabled>Base game</label>
+          <label style="display: block;"><input type="checkbox" id="deluxeLeaders" checked>Deluxe edition</label>
+          <br>
+          <label style="display: block;">--- options ---</label>
+          <label style="display: block;"><input type="checkbox" id="allowDuplicates"> Allow duplicate leaders</label>
 
         <!-- Kontener na przyciski, w jednej linii, z 'Generate!' wycentrowanym, 'Copy results' w prawym rogu -->
         <div style="position: relative; text-align: center; margin-top: 20px;">
@@ -219,43 +223,58 @@
 
 
   <script>
-      const leadersCiv7 = {
+      // BAZOWA grupa liderów (domyślna)
+      const baseLeaders = {
           "Amina": "https://static.wikia.nocookie.net/civilization/images/d/d8/Amina_%28Civ7%29.png",
-          "Ashoka, World Conqueror": "https://static.wikia.nocookie.net/civilization/images/1/19/Ashoka%2C_World_Conqueror_%28Civ7%29.png",
           "Ashoka, World Renouncer": "https://static.wikia.nocookie.net/civilization/images/b/b2/Ashoka%2C_World_Renouncer_%28Civ7%29.png",
           "Augustus": "https://static.wikia.nocookie.net/civilization/images/9/99/Augustus_%28Civ7%29.png",
           "Benjamin Franklin": "https://static.wikia.nocookie.net/civilization/images/4/4c/Benjamin_Franklin_%28Civ7%29.png",
           "Catherine the Great": "https://static.wikia.nocookie.net/civilization/images/c/c5/Catherine_the_Great_%28Civ7%29.png",
           "Charlemagne": "https://static.wikia.nocookie.net/civilization/images/d/dd/Charlemagne_%28Civ7%29.png",
           "Confucius": "https://static.wikia.nocookie.net/civilization/images/c/c4/Confucius_%28Civ7%29.png",
-          "Friedrich, Baroque": "https://static.wikia.nocookie.net/civilization/images/6/60/Friedrich%2C_Baroque_%28Civ7%29.png",
           "Friedrich, Oblique": "https://static.wikia.nocookie.net/civilization/images/5/5f/Friedrich%2C_Oblique_%28Civ7%29.png",
           "Harriet Tubman": "https://static.wikia.nocookie.net/civilization/images/c/cf/Harriet_Tubman_%28Civ7%29.png",
           "Hatshepsut": "https://static.wikia.nocookie.net/civilization/images/0/05/Hatshepsut_%28Civ7%29.png",
-          "Himiko, High Shaman": "https://static.wikia.nocookie.net/civilization/images/1/15/Himiko%2C_High_Shaman_%28Civ7%29.png",
           "Himiko, Queen of Wa": "https://static.wikia.nocookie.net/civilization/images/a/af/Himiko%2C_Queen_of_Wa_%28Civ7%29.png",
           "Ibn Battuta": "https://static.wikia.nocookie.net/civilization/images/2/27/Ibn_Battuta_%28Civ7%29.png",
           "Isabella": "https://static.wikia.nocookie.net/civilization/images/b/b3/Isabella_%28Civ7%29.png",
           "José Rizal": "https://static.wikia.nocookie.net/civilization/images/e/ea/Jos%C3%A9_Rizal_%28Civ7%29.png",
           "Lafayette": "https://static.wikia.nocookie.net/civilization/images/8/82/Lafayette_%28Civ7%29.png",
           "Napoleon, Emperor": "https://static.wikia.nocookie.net/civilization/images/f/ff/Napoleon%2C_Emperor_%28Civ7%29.png",
-          "Napoleon, Revolutionary": "https://static.wikia.nocookie.net/civilization/images/4/4b/Napoleon%2C_Revolutionary_%28Civ7%29.png",
           "Machiavelli": "https://static.wikia.nocookie.net/civilization/images/6/6b/Machiavelli_%28Civ7%29.png",
           "Pachacuti": "https://static.wikia.nocookie.net/civilization/images/5/5f/Pachacuti_%28Civ7%29.png",
           "Tecumseh": "https://static.wikia.nocookie.net/civilization/images/0/08/Tecumseh_%28Civ7%29.png",
           "Trung Trac": "https://static.wikia.nocookie.net/civilization/images/2/2e/Trung_Trac_%28Civ7%29.png",
-          "Xerxes, King of Kings": "https://static.wikia.nocookie.net/civilization/images/3/36/Xerxes%2C_King_of_Kings_%28Civ7%29.png",
+          "Xerxes, King of Kings": "https://static.wikia.nocookie.net/civilization/images/3/36/Xerxes%2C_King_of_Kings_%28Civ7%29.png"
+      };
+
+      // DODATKOWA grupa liderów (włączana checkboxem)
+      const deluxeLeaders = {
+          "Ashoka, World Conqueror": "https://static.wikia.nocookie.net/civilization/images/1/19/Ashoka%2C_World_Conqueror_%28Civ7%29.png",
+          "Friedrich, Baroque": "https://static.wikia.nocookie.net/civilization/images/6/60/Friedrich%2C_Baroque_%28Civ7%29.png",
+          "Himiko, High Shaman": "https://static.wikia.nocookie.net/civilization/images/1/15/Himiko%2C_High_Shaman_%28Civ7%29.png",
+          "Napoleon, Revolutionary": "https://static.wikia.nocookie.net/civilization/images/4/4b/Napoleon%2C_Revolutionary_%28Civ7%29.png",
           "Xerxes, The Achaemenid": "https://static.wikia.nocookie.net/civilization/images/d/d5/Xerxes%2C_the_Achaemenid_%28Civ7%29.png"
       };
+
+
 
       // Generuje listę liderów
       function getRandomLeaders(num, allowDuplicates, availableLeaders) {
           const selectedLeaders = [];
+          const leaderKeys = Object.keys(availableLeaders);
+
           for (let i = 0; i < num; i++) {
-              const randomIndex = Math.floor(Math.random() * availableLeaders.length);
-              selectedLeaders.push(availableLeaders[randomIndex]);
+              if (leaderKeys.length === 0) break;
+
+              const randomIndex = Math.floor(Math.random() * leaderKeys.length);
+              const selected = leaderKeys[randomIndex];
+
+              selectedLeaders.push(selected);
+
               if (!allowDuplicates) {
-                  availableLeaders.splice(randomIndex, 1);
+                  leaderKeys.splice(randomIndex, 1); // Usuwamy klucz z tablicy
+                  delete availableLeaders[selected]; // Usuwamy lidera z dostępnych
               }
           }
           return selectedLeaders;
@@ -263,28 +282,30 @@
 
       // Tworzy i wyświetla wyniki
       function showResults() {
-          const numPlayers = document.getElementById('numPlayers').value;
-          const numLeaders = document.getElementById('numLeaders').value;
+          const numPlayers = parseInt(document.getElementById('numPlayers').value);
+          const numLeaders = parseInt(document.getElementById('numLeaders').value);
+          const includeDeluxeLeaders = document.getElementById('deluxeLeaders').checked;
           const allowDuplicates = document.getElementById('allowDuplicates').checked;
           const resultsDiv = document.getElementById('results');
           const resultsContainer = document.getElementById('resultsContainer');
           const copyBtn = document.getElementById('copyButton');
 
           resultsDiv.innerHTML = '';
-
-          // Pokaż ramkę na wyniki
           resultsContainer.style.display = 'block';
 
+          let availableLeaders = includeDeluxeLeaders 
+              ? { ...baseLeaders, ...deluxeLeaders } 
+              : { ...baseLeaders };
+
           // Sprawdzenie, czy mamy wystarczająco unikalnych liderów
-          if (!allowDuplicates && numPlayers * numLeaders > Object.keys(leadersCiv7).length) {
+          const totalLeadersNeeded = numPlayers * numLeaders;
+          if (!allowDuplicates && totalLeadersNeeded > Object.keys(availableLeaders).length) {
               alert('Not enough unique leaders available for the selected settings.');
               return;
           }
 
           // Pokaż przycisk Copy, skoro mamy jakieś wyniki
           copyBtn.style.display = 'inline-block';
-
-          let availableLeaders = Object.keys(leadersCiv7);
 
           // Tworzymy graczy
           for (let i = 1; i <= numPlayers; i++) {
@@ -295,7 +316,7 @@
               playerHeader.textContent = `Civhead ${i}`;
               playerDiv.appendChild(playerHeader);
 
-              const selectedLeaders = getRandomLeaders(numLeaders, allowDuplicates, availableLeaders);
+              const selectedLeaders = getRandomLeaders(numLeaders, allowDuplicates, { ...availableLeaders });
 
               selectedLeaders.forEach(leader => {
                   const leaderDiv = document.createElement('div');
@@ -303,7 +324,7 @@
 
                   const leaderImg = document.createElement('img');
                   leaderImg.crossOrigin = 'anonymous';
-                  leaderImg.src = leadersCiv7[leader];
+                  leaderImg.src = availableLeaders[leader];
                   leaderImg.alt = leader;
 
                   const leaderText = document.createElement('span');
@@ -311,13 +332,13 @@
 
                   leaderDiv.appendChild(leaderImg);
                   leaderDiv.appendChild(leaderText);
-
                   playerDiv.appendChild(leaderDiv);
               });
 
               resultsDiv.appendChild(playerDiv);
           }
       }
+
 
       // Kopiuje ramkę wyników do schowka jako PNG
       function copyResults() {
