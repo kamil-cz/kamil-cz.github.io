@@ -81,7 +81,6 @@
           font-size: 20px;
           width: 100%;
           cursor: pointer;
-          /* Lewy i prawy bok półkola (pill shape) */
           border-top-left-radius: 9999px;
           border-bottom-left-radius: 9999px;
           border-top-right-radius: 9999px;
@@ -213,7 +212,6 @@
 
       <div id="resultsContainer" class="results-box" style="display: none;">
           <div style="position: relative; text-align: center; margin-top: 0px;">
-            <!-- Copy results w prawym górnym rogu, wyświetlany po kliknięciu -->
             <button class="round-button" id="copyButton" style="display: none; position: absolute; top: -10px; right: -10px;" onclick="copyResults()">
               <span class="material-symbols-outlined">
               content_copy
@@ -224,9 +222,18 @@
       </div>
 
 
-      <div id="bottomFrame">
+      <div id="bottomFrame" style="display: flex; justify-content: space-between;">
+        <div> 
           <button class="button-tnp" onclick="window.open('https://github.com/kamil-cz/kamil-cz.github.io', '_blank')" style="display: inline-block; width: 80px;">Github</button>
           <button class="button-tnp" onclick="window.open('https://ko-fi.com/rogueal', '_blank')" style="display: inline-block; width: 80px;">Coffee</button>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: center; color: #007ACC;">
+          <a href="https://discord.gg/NGnEvtAg" style="display: inline-block; padding: 10px 20px; color: #007ACC;">
+          #discord
+          </a>
+          <label>v0.2</label>
+
+        </div>
       </div>
 
 
