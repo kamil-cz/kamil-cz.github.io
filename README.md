@@ -23,7 +23,7 @@ You can contact me through civpik's discord server - https://discord.gg/gaW7hsxk
 
 ## Authors
 
-Rogueal - ko-fi.com/rogueal
+Rogueal - https://ko-fi.com/rogueal
 
 ## Version History
 
