@@ -1,6 +1,6 @@
 # Project Title
 
-The Civilization VII Drafter App 
+CIVPIK - The Civilization VII Drafter App 
 
 ## Description
 
