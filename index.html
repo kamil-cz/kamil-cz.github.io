@@ -7,12 +7,12 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-NPEGPCPGB4');
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>civ7drafter</title>
+  <meta name="description" content="Civ 7 Drafter. Tool that helps you with your multiplayer Civilization VII games.">
+  <title>The Civ 7 Drafter</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
@@ -41,7 +41,6 @@
           margin: 0 auto;
           padding: 20px;
           border-radius: 30px;
-          
       }
 
       h1 {
@@ -57,6 +56,11 @@
           margin-bottom: 5px;
       }
 
+      labelFoot {
+        margin-right: 10px;
+        font-size: 12px;
+      }
+
       .parameters-box {
           border: 2px solid rgba(255,255,255,0.2);
           border-radius: 20px;
@@ -66,6 +70,13 @@
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
       }
 
+      hr {
+          border: 0;               /* Usuń domyślną obwódkę */
+          height: 2px;             /* Wysokość linii */
+          background-color: rgba(255,255,255,0.2);  /* Kolor linii */
+          margin: 10px 0;          /* Margines góra/dół */
+      }
+
       .slider-row {
           display: flex;
           flex-direction: column;
@@ -73,14 +84,13 @@
       }
 
       .slider-row label {
-          font-size: 15px;
+          font-size: 16px;
           margin-bottom: 5px;
       }
 
       input[type=checkbox] {
           margin-right: 10px;
       }
-
 
       .button {
           background-color: #007ACC;
@@ -100,7 +110,6 @@
           background-color: #005F99;
       }
 
-
       .round-button {
           width: 70px;
           height: 70px;
@@ -119,16 +128,14 @@
           background-color: #5F7718;
       }
 
-
       .button-tnp {
           background: transparent;
           border: 2px solid #00253D;
           color: #007ACC;
           padding: 10px 10px;
-          font-size: 16px;
+          font-size: 14px;
           width: 100%;
           cursor: pointer;
-          /* Lewy i prawy bok półkola (pill shape) */
           border-top-left-radius: 9999px;
           border-bottom-left-radius: 9999px;
           border-top-right-radius: 9999px;
@@ -137,7 +144,6 @@
       .button-tnp:hover {
           background-color: #005F99;
       }
-   
 
       .results-box {
           border: 2px solid rgba(255,255,255,0.2);
@@ -172,17 +178,42 @@
           border-radius: 50%;
       }
 
-      .leader span.separator {
-          margin-left: 10px;
-          margin-right: 10px;
-          border-left: 2px solid #555;
-          height: 50px;
-      }
-
       input[type=range] {
           width: 100%;
       }
 
+      /* Styl dla sekcji zwijanej LEADERS */
+      .collapsible-toggle {
+          background: none;
+          border: none;
+          color: #FFFFFF;
+          cursor: pointer;
+          font-size: 15px;
+          padding: 0;
+          margin-bottom: 5px;
+          display: flex;
+          align-items: center;
+      }
+      .collapsible-toggle:focus {
+          outline: none;
+      }
+      .collapsible-content {
+          display: none; /* początkowo schowane */
+      }
+
+      /* Styl do sekcji radiobuttonów epok */
+      .era-selection {
+          display: flex;
+          justify-content: space-evenly;
+          margin: 10px 0;
+      }
+      .era-selection label {
+          cursor: pointer;
+          user-select: none;
+      }
+      .era-selection input[type="radio"] {
+          margin-right: 5px;
+      }
   </style>
 </head>
 <body>
@@ -194,23 +225,64 @@
         <!-- Suwaki -->
         <div class="slider-row">
           <label for="numPlayers">
-            Number of players: <span id="numPlayersValue">1</span>
+            # PLAYERS: <span id="numPlayersValue">1</span>
           </label>
           <input type="range" id="numPlayers" name="numPlayers" min="1" max="8" value="1" oninput="updatePlayerValue()">
         </div>
-        <div class="slider-row">
+        <hr />
+        <!-- Sekcja suwaka: Leaders per player -->
+        <div class="slider-row" id="leadersSection">
           <label for="numLeaders">
+            <input type="checkbox" id="useLeaders" checked>
             Leaders per player: <span id="numLeadersValue">1</span>
           </label>
           <input type="range" id="numLeaders" name="numLeaders" min="1" max="6" value="1" oninput="updateLeaderValue()">
         </div>
-          <label style="display: block;">--- LEADERS ---</label>
-          <label style="display: block;"><input type="checkbox" id="baseLeaders" checked disabled>Base game</label>
-          <label style="display: block;"><input type="checkbox" id="deluxeLeaders" checked>Deluxe edition</label>
-          <label style="display: block;"><input type="checkbox" id="foundersLeaders" checked>Founders edition</label>
+
+        <!-- Nowy suwak Civs per player + checkbox -->
+        <div class="slider-row" id="civsSection">
+          <label for="numCivs">
+            <input type="checkbox" id="useCivs" checked>
+            Civs per player: <span id="numCivsValue">1</span>
+          </label>
+          <input type="range" id="numCivs" name="numCivs" min="1" max="6" value="1" oninput="updateCivsValue()">
+        </div>
+
+        <!-- Wybór epoki cywilizacji (radio), przeniesiony niżej, zależny od useCivs -->
+        <div class="era-selection" id="eraSelection">
+          <label><input type="radio" name="civEra" value="Antiquity" checked>Antiquity</label>
+          <label><input type="radio" name="civEra" value="Exploration">Exploration</label>
+          <label><input type="radio" name="civEra" value="Modern">Modern</label>
+        </div>
+        <hr />
+
+        <!-- Sekcja zwijana LEADERS -->
+        
+        <button type="button" class="collapsible-toggle" id="leadersToggle">► SETTINGS</button>
+        <div class="collapsible-content" id="leadersContent">
+          <label style="display: block;">--- DLCs ---</label>
+          <label style="display: block;">
+            <input type="checkbox" id="selectAllLeaders" checked>
+            SELECT ALL
+          </label>
+          <label style="display: block;">
+            <input type="checkbox" id="baseLeaders" checked disabled>
+            Base game
+          </label>
+          <label style="display: block;">
+            <input type="checkbox" id="deluxeLeaders" checked>
+            Deluxe edition
+          </label>
+          <label style="display: block;">
+            <input type="checkbox" id="foundersLeaders" checked>
+            Founders edition
+          </label>
           <br>
-          <label style="display: block;">--- options ---</label>
-          <label style="display: block;"><input type="checkbox" id="allowDuplicates"> Allow duplicate leaders</label>
+          <label style="display: block;">--- Options ---</label>
+          <label style="display: block;"><input type="checkbox" id="allowDuplicateLeaders"> Allow duplicate leaders</label>
+          <label style="display: block;"><input type="checkbox" id="allowDuplicateCivs" checked> Allow duplicate civs</label>
+        </div>
+
 
 
         <div style="position: relative; text-align: center; margin-top: 20px;">
@@ -218,37 +290,32 @@
         </div>
       </div>
 
-
       <div id="resultsContainer" class="results-box" style="display: none;">
           <div style="position: relative; text-align: center; margin-top: 0px;">
             <button class="round-button" id="copyButton" style="display: none; position: absolute; top: -10px; right: -10px;" onclick="copyResults()">
               <span class="material-symbols-outlined">
-              content_copy
+                content_copy
               </span>
             </button>
           </div>
           <div id="results"></div>
       </div>
 
-
       <div id="bottomFrame" style="display: flex; justify-content: space-between;">
-        <div> 
+        <div>
           <button class="button-tnp" onclick="window.open('https://github.com/kamil-cz/kamil-cz.github.io', '_blank')" style="display: inline-block; width: 80px;">Github</button>
           <button class="button-tnp" onclick="window.open('https://ko-fi.com/rogueal', '_blank')" style="display: inline-block; width: 80px;">Coffee</button>
           <button class="button-tnp" onclick="window.open('https://discord.gg/NGnEvtAg', '_blank')" style="display: inline-block; width: 80px;">Discord</button>
         </div>
         <div style="display: flex; align-items: center; justify-content: center; color: #007ACC;">
-          <label>v0.2</label>
+          <labelFoot style="color: #DDEDAA;">2025 created by rogueal ---</labelFoot>
+          <labelFoot style="color: #DDEDAA;">v0.3</labelFoot>
         </div>
       </div>
-
-
   </div>
 
-
-
   <script>
-
+      // ------------------- LEADERS -------------------
       const baseLeaders = {
           "Amina": "https://static.wikia.nocookie.net/civilization/images/d/d8/Amina_%28Civ7%29.png",
           "Ashoka, World Renouncer": "https://static.wikia.nocookie.net/civilization/images/b/b2/Ashoka%2C_World_Renouncer_%28Civ7%29.png",
@@ -274,7 +341,6 @@
           "Xerxes, King of Kings": "https://static.wikia.nocookie.net/civilization/images/3/36/Xerxes%2C_King_of_Kings_%28Civ7%29.png"
       };
 
-
       const deluxeLeaders = {
           "Friedrich, Baroque": "https://static.wikia.nocookie.net/civilization/images/6/60/Friedrich%2C_Baroque_%28Civ7%29.png",
           "Xerxes, The Achaemenid": "https://static.wikia.nocookie.net/civilization/images/d/d5/Xerxes%2C_the_Achaemenid_%28Civ7%29.png"
@@ -287,47 +353,155 @@
           "Xerxes, The Achaemenid": "https://static.wikia.nocookie.net/civilization/images/d/d5/Xerxes%2C_the_Achaemenid_%28Civ7%29.png"
       };
 
+      // ------------------- CIVS PODZIELONE NA 3 EPOKI -------------------
+      // Dla przykładu wstawiamy po kilka cywilizacji do każdej epoki
+      const baseCivs = {
+        "Antiquity": {
+          "Aksumite": "https://static.wikia.nocookie.net/civilization/images/8/8f/Aksumite_%28Civ7%29.png/revision/latest?cb=20250215075101",
+          "Egyptian": "https://static.wikia.nocookie.net/civilization/images/1/19/Egyptian_%28Civ7%29.png/revision/latest?cb=20250215075050",
+          "Greek": "https://static.wikia.nocookie.net/civilization/images/0/02/Greek_%28Civ7%29.png/revision/latest?cb=20250215074007",
+          "Han": "https://static.wikia.nocookie.net/civilization/images/6/69/Han_%28Civ7%29.png/revision/latest?cb=20250215074308",
+          "Khmer": "https://static.wikia.nocookie.net/civilization/images/3/3e/Khmer_%28Civ7%29.png/revision/latest?cb=20250215075038",
+          "Mauryan": "https://static.wikia.nocookie.net/civilization/images/6/60/Mauryan_%28Civ7%29.png/revision/latest?cb=20250215075028",
+          "Maya": "https://static.wikia.nocookie.net/civilization/images/c/c2/Maya_%28Civ7%29.png/revision/latest?cb=20250215074318",
+          "Mississippian": "https://static.wikia.nocookie.net/civilization/images/5/52/Mississippian_%28Civ7%29.png/revision/latest?cb=20250215074258",
+          "Persian": "https://static.wikia.nocookie.net/civilization/images/9/97/Persian_%28Civ7%29.png/revision/latest?cb=20250215075017",
+          "Roman": "https://static.wikia.nocookie.net/civilization/images/9/9f/Roman_%28Civ7%29.png/revision/latest?cb=20250215075008"
+        },
+        "Exploration": {
+          "Abbasid": "https://static.wikia.nocookie.net/civilization/images/9/9c/Abbasid_%28Civ7%29.png/revision/latest?cb=20250215074957",
+          "Chola": "https://static.wikia.nocookie.net/civilization/images/6/61/Chola_%28Civ7%29.png/revision/latest?cb=20250215075135",
+          "Hawaiian": "https://static.wikia.nocookie.net/civilization/images/d/d9/Hawaiian_%28Civ7%29.png/revision/latest?cb=20250215074936",
+          "Incan": "https://static.wikia.nocookie.net/civilization/images/9/91/Incan_%28Civ7%29.png/revision/latest?cb=20250215074926",
+          "Majapahit": "https://static.wikia.nocookie.net/civilization/images/7/71/Majapahit_%28Civ7%29.png/revision/latest?cb=20250215074916",
+          "Ming": "https://static.wikia.nocookie.net/civilization/images/0/09/Ming_%28Civ7%29.png/revision/latest?cb=20250215074907",
+          "Mongolian": "https://static.wikia.nocookie.net/civilization/images/1/19/Mongolian_%28Civ7%29.png/revision/latest?cb=20250215074851",
+          "Norman": "https://static.wikia.nocookie.net/civilization/images/0/02/Norman_%28Civ7%29.png/revision/latest?cb=20250215074827",
+          "Shawnee": "https://static.wikia.nocookie.net/civilization/images/e/eb/Shawnee_%28Civ7%29.png/revision/latest?cb=20250215074751",
+          "Songhai": "https://static.wikia.nocookie.net/civilization/images/0/02/Songhai_%28Civ7%29.png/revision/latest?cb=20250215074815",
+          "Spanish": "https://static.wikia.nocookie.net/civilization/images/6/65/Spanish_%28Civ7%29.png/revision/latest?cb=20250215074800"
+        },
+        "Modern": {
+          "American": "https://static.wikia.nocookie.net/civilization/images/d/d6/American_%28Civ7%29.png/revision/latest?cb=20250215074738",
+          "Bugandan": "https://static.wikia.nocookie.net/civilization/images/1/13/Bugandan_%28Civ7%29.png/revision/latest?cb=20250215074727",
+          "French Imperial": "https://static.wikia.nocookie.net/civilization/images/a/a9/French_Imperial_%28Civ7%29.png/revision/latest?cb=20250215074717",
+          "Meiji Japanese": "https://static.wikia.nocookie.net/civilization/images/2/2e/Meiji_Japanese_%28Civ7%29.png/revision/latest?cb=20250215074708",
+          "Mexican": "https://static.wikia.nocookie.net/civilization/images/f/f6/Mexican_%28Civ7%29.png/revision/latest?cb=20250215074658",
+          "Mughal": "https://static.wikia.nocookie.net/civilization/images/5/5b/Mughal_%28Civ7%29.png/revision/latest?cb=20250215074646",
+          "Prussian": "https://static.wikia.nocookie.net/civilization/images/0/07/Prussian_%28Civ7%29.png/revision/latest?cb=20250215074632",
+          "Qing": "https://static.wikia.nocookie.net/civilization/images/6/69/Qing_%28Civ7%29.png/revision/latest?cb=20250215074622",
+          "Russian": "https://static.wikia.nocookie.net/civilization/images/a/a2/Russian_%28Civ7%29.png/revision/latest?cb=20250215074614",
+          "Siamese": "https://static.wikia.nocookie.net/civilization/images/e/e1/Siamese_%28Civ7%29.png/revision/latest?cb=20250215074605"
+        }
+      };
 
+      const deluxeCivs = {
+        "Antiquity": {
+        },
+        "Exploration": {
+        },
+        "Modern": {
+        }
+      };
 
+      const foundersCivs = {
+        "Antiquity": {
+        },
+        "Exploration": {
+        },
+        "Modern": {
+        }
+      };
 
-
+      // ----------------- GENEROWANIE WYNIKÓW -----------------
       function showResults() {
           const numPlayers = parseInt(document.getElementById('numPlayers').value);
-          const numLeaders = parseInt(document.getElementById('numLeaders').value);
-          const includeDeluxeLeaders = document.getElementById('deluxeLeaders').checked;
+
+          // Czy używamy liderów i/lub cywilizacji?
+          const useLeaders = document.getElementById('useLeaders').checked;
+          const useCivs    = document.getElementById('useCivs').checked;
+
+          // Odczytujemy suwaki tylko jeśli dane checkboxy są zaznaczone
+          const numLeaders = useLeaders ? parseInt(document.getElementById('numLeaders').value) : 0;
+          const numCivs    = useCivs    ? parseInt(document.getElementById('numCivs').value)   : 0;
+
+          // Sprawdzamy, którą epokę cywilizacji wybrano
+          const chosenEra = document.querySelector('input[name="civEra"]:checked').value;
+
+          // Checkboxy na edycje/dodatki
+          const includeDeluxeLeaders   = document.getElementById('deluxeLeaders').checked;
           const includeFoundersLeaders = document.getElementById('foundersLeaders').checked;
-          const allowDuplicates = document.getElementById('allowDuplicates').checked;
+
+          // Checkboxy duplikacji
+          const allowDuplicateLeaders = document.getElementById('allowDuplicateLeaders').checked;
+          const allowDuplicateCivs    = document.getElementById('allowDuplicateCivs').checked;
+
           const resultsDiv = document.getElementById('results');
           const resultsContainer = document.getElementById('resultsContainer');
           const copyBtn = document.getElementById('copyButton');
 
-
+          // Czyścimy poprzednie wyniki
           resultsDiv.innerHTML = '';
+          resultsContainer.style.display = 'none';
 
+          // Jeśli oba checkboksy są wyłączone, nic nie generujemy
+          if (!useLeaders && !useCivs) {
+              alert("You turned off both Leaders and Civs. There's nothing to generate!");
+              return;
+          }
 
-          let availableLeaders = { ...baseLeaders };
-          if (includeDeluxeLeaders) availableLeaders = { ...availableLeaders, ...deluxeLeaders };
-          if (includeFoundersLeaders) availableLeaders = { ...availableLeaders, ...foundersLeaders };
-
+          // ------------------ POBRANIE PULI DANYCH ------------------
+          // 1) Liderzy
+          let availableLeaders = {};
+          if (useLeaders) {
+              availableLeaders = { ...baseLeaders };
+              if (includeDeluxeLeaders)   availableLeaders = { ...availableLeaders, ...deluxeLeaders };
+              if (includeFoundersLeaders) availableLeaders = { ...availableLeaders, ...foundersLeaders };
+          }
           const leaderKeys = Object.keys(availableLeaders);
 
-          if (leaderKeys.length === 0) {
-              alert('No leaders selected!');
-              return;
+          // 2) Cywilizacje (tylko z wybranej epoki)
+          let availableCivs = {};
+          if (useCivs) {
+              // z base
+              availableCivs = { ...baseCivs[chosenEra] }; 
+              // deluxe
+              if (includeDeluxeLeaders && deluxeCivs[chosenEra]) {
+                availableCivs = { ...availableCivs, ...deluxeCivs[chosenEra] };
+              }
+              // founders
+              if (includeFoundersLeaders && foundersCivs[chosenEra]) {
+                availableCivs = { ...availableCivs, ...foundersCivs[chosenEra] };
+              }
+          }
+          const civKeys = Object.keys(availableCivs);
+
+          // ------------------ SPRAWDZANIE PULI (bez duplikatów) ------------------
+          if (useLeaders) {
+              const totalLeadersNeeded = numPlayers * numLeaders;
+              if (!allowDuplicateLeaders && totalLeadersNeeded > leaderKeys.length) {
+                  alert('Not enough unique leaders available for the selected settings.');
+                  return;
+              }
           }
 
-
-          const totalLeadersNeeded = numPlayers * numLeaders;
-          if (!allowDuplicates && totalLeadersNeeded > leaderKeys.length) {
-              alert('Not enough unique leaders available for the selected settings.');
-              return;
+          if (useCivs) {
+              const totalCivsNeeded = numPlayers * numCivs;
+              if (!allowDuplicateCivs && totalCivsNeeded > civKeys.length) {
+                  alert('Not enough unique civs available in selected era for the selected settings.');
+                  return;
+              }
           }
 
+          // ------------------ URUCHOMIENIE WYNIKÓW ------------------
           resultsContainer.style.display = 'block';
           copyBtn.style.display = 'inline-block';
 
-          let tempLeaders = [...leaderKeys];
+          // Kopie list do losowania globalnego
+          let globalLeadersPool = [...leaderKeys];
+          let globalCivsPool    = [...civKeys];
 
+          // ------------------ LOSOWANIE ------------------
           for (let i = 1; i <= numPlayers; i++) {
               const playerDiv = document.createElement('div');
               playerDiv.className = 'player';
@@ -336,43 +510,123 @@
               playerHeader.textContent = `Civhead ${i}`;
               playerDiv.appendChild(playerHeader);
 
-              let selectedLeaders = [];
+              // Liderzy
+              if (useLeaders) {
+                  let selectedLeaders = [];
+                  let localLeadersPool = allowDuplicateLeaders
+                    ? [...globalLeadersPool]
+                    : globalLeadersPool;
 
-              for (let j = 0; j < numLeaders; j++) {
-                  if (tempLeaders.length === 0) break;
+                  for (let j = 0; j < numLeaders; j++) {
+                      if (localLeadersPool.length === 0) break;
 
-                  let randomIndex = Math.floor(Math.random() * tempLeaders.length);
-                  let selectedLeader = tempLeaders[randomIndex];
+                      let chosenLeader = null;
+                      let attempts = 0;
+                      while (!chosenLeader && attempts < 1000) {
+                          let randomIndex = Math.floor(Math.random() * localLeadersPool.length);
+                          let candidate = localLeadersPool[randomIndex];
+                          if (!selectedLeaders.includes(candidate)) {
+                              chosenLeader = candidate;
+                          }
+                          attempts++;
+                      }
 
-                  selectedLeaders.push(selectedLeader);
-
-                  if (!allowDuplicates) {
-                      tempLeaders.splice(randomIndex, 1);
+                      if (chosenLeader) {
+                          selectedLeaders.push(chosenLeader);
+                          if (!allowDuplicateLeaders) {
+                              const removeIndex = globalLeadersPool.indexOf(chosenLeader);
+                              if (removeIndex > -1) {
+                                  globalLeadersPool.splice(removeIndex, 1);
+                              }
+                          }
+                          const localRemoveIndex = localLeadersPool.indexOf(chosenLeader);
+                          if (localRemoveIndex > -1) {
+                              localLeadersPool.splice(localRemoveIndex, 1);
+                          }
+                      }
                   }
+
+                  // Wyświetlenie wylosowanych liderów
+                  selectedLeaders.forEach(leader => {
+                      const leaderDiv = document.createElement('div');
+                      leaderDiv.className = 'leader';
+
+                      const leaderImg = document.createElement('img');
+                      leaderImg.src = availableLeaders[leader] || '#'; 
+
+                      const leaderText = document.createElement('span');
+                      leaderText.textContent = leader;
+
+                      leaderDiv.appendChild(leaderImg);
+                      leaderDiv.appendChild(leaderText);
+                      playerDiv.appendChild(leaderDiv);
+                  });
               }
 
-              selectedLeaders.forEach(leader => {
-                  const leaderDiv = document.createElement('div');
-                  leaderDiv.className = 'leader';
+              // Liniowy odstęp
+              if (useLeaders && useCivs) {
+                  const lineBreak = document.createElement('br');
+                  playerDiv.appendChild(lineBreak);
+              }
 
-                  const leaderImg = document.createElement('img');
-                  leaderImg.src = availableLeaders[leader];
+              // Cywilizacje
+              if (useCivs) {
+                  let selectedCivs = [];
+                  let localCivsPool = allowDuplicateCivs
+                    ? [...globalCivsPool]
+                    : globalCivsPool;
 
-                  const leaderText = document.createElement('span');
-                  leaderText.textContent = leader;
+                  for (let c = 0; c < numCivs; c++) {
+                      if (localCivsPool.length === 0) break;
 
-                  leaderDiv.appendChild(leaderImg);
-                  leaderDiv.appendChild(leaderText);
-                  playerDiv.appendChild(leaderDiv);
-              });
+                      let chosenCiv = null;
+                      let attempts = 0;
+                      while (!chosenCiv && attempts < 1000) {
+                          let randomIndex = Math.floor(Math.random() * localCivsPool.length);
+                          let candidate = localCivsPool[randomIndex];
+                          if (!selectedCivs.includes(candidate)) {
+                              chosenCiv = candidate;
+                          }
+                          attempts++;
+                      }
+
+                      if (chosenCiv) {
+                          selectedCivs.push(chosenCiv);
+                          if (!allowDuplicateCivs) {
+                              const removeIndex = globalCivsPool.indexOf(chosenCiv);
+                              if (removeIndex > -1) {
+                                  globalCivsPool.splice(removeIndex, 1);
+                              }
+                          }
+                          const localRemoveIndex = localCivsPool.indexOf(chosenCiv);
+                          if (localRemoveIndex > -1) {
+                              localCivsPool.splice(localRemoveIndex, 1);
+                          }
+                      }
+                  }
+
+                  // Wyświetlenie wylosowanych cywilizacji
+                  selectedCivs.forEach(civ => {
+                      const civDiv = document.createElement('div');
+                      civDiv.className = 'leader';
+
+                      const civImg = document.createElement('img');
+                      civImg.src = availableCivs[civ] || '#';
+
+                      const civText = document.createElement('span');
+                      civText.textContent = civ;
+
+                      civDiv.appendChild(civImg);
+                      civDiv.appendChild(civText);
+                      playerDiv.appendChild(civDiv);
+                  });
+              }
 
               resultsDiv.appendChild(playerDiv);
           }
       }
 
-
-
-
+      // ----------------- KOPIOWANIE WYNIKÓW -----------------
       function copyResults() {
         const results = document.getElementById('results');
 
@@ -393,6 +647,7 @@
         });
       }
 
+      // ----------------- SLIDERY -----------------
       function updatePlayerValue() {
           const numPlayers = document.getElementById('numPlayers').value;
           document.getElementById('numPlayersValue').textContent = numPlayers;
@@ -402,6 +657,82 @@
           const numLeaders = document.getElementById('numLeaders').value;
           document.getElementById('numLeadersValue').textContent = numLeaders;
       }
+
+      function updateCivsValue() {
+          const numCivs = document.getElementById('numCivs').value;
+          document.getElementById('numCivsValue').textContent = numCivs;
+      }
+
+      // ----------------- ROZWIJANIE/ZWIJANIE LEADERS -----------------
+      const leadersToggle = document.getElementById('leadersToggle');
+      const leadersContent = document.getElementById('leadersContent');
+
+      leadersToggle.addEventListener('click', function() {
+          if (leadersContent.style.display === 'none' || !leadersContent.style.display) {
+              leadersContent.style.display = 'block';
+              leadersToggle.textContent = '▼ SETTINGS';
+          } else {
+              leadersContent.style.display = 'none';
+              leadersToggle.textContent = '► SETTINGS';
+          }
+      });
+
+      // ----------------- SELECT ALL LEADERS -----------------
+      const selectAllLeadersCheckbox = document.getElementById('selectAllLeaders');
+      const deluxeLeadersCheckbox   = document.getElementById('deluxeLeaders');
+      const foundersLeadersCheckbox = document.getElementById('foundersLeaders');
+
+      selectAllLeadersCheckbox.addEventListener('change', () => {
+        deluxeLeadersCheckbox.checked   = selectAllLeadersCheckbox.checked;
+        foundersLeadersCheckbox.checked = selectAllLeadersCheckbox.checked;
+      });
+
+      [deluxeLeadersCheckbox, foundersLeadersCheckbox].forEach(cb => {
+        cb.addEventListener('change', () => {
+          if (!deluxeLeadersCheckbox.checked || !foundersLeadersCheckbox.checked) {
+            selectAllLeadersCheckbox.checked = false;
+          } else {
+            selectAllLeadersCheckbox.checked = true;
+          }
+        });
+      });
+
+      // ----------------- AKTYWACJA / DEZAKTYWACJA SUWAKÓW I EPOK -----------------
+      const useLeadersCheckbox = document.getElementById('useLeaders');
+      const leadersSection     = document.getElementById('leadersSection');
+      const numLeadersSlider   = document.getElementById('numLeaders');
+
+      const useCivsCheckbox  = document.getElementById('useCivs');
+      const civsSection      = document.getElementById('civsSection');
+      const numCivsSlider    = document.getElementById('numCivs');
+      const eraSelectionDiv  = document.getElementById('eraSelection');
+      const eraRadioButtons  = document.getElementsByName('civEra');
+
+      useLeadersCheckbox.addEventListener('change', () => {
+        if (useLeadersCheckbox.checked) {
+          leadersSection.style.opacity = '1';
+          numLeadersSlider.disabled = false;
+        } else {
+          leadersSection.style.opacity = '0.4';
+          numLeadersSlider.disabled = true;
+        }
+      });
+
+      useCivsCheckbox.addEventListener('change', () => {
+        if (useCivsCheckbox.checked) {
+          civsSection.style.opacity = '1';
+          numCivsSlider.disabled = false;
+
+          eraSelectionDiv.style.opacity = '1';
+          eraRadioButtons.forEach(rb => rb.disabled = false);
+        } else {
+          civsSection.style.opacity = '0.4';
+          numCivsSlider.disabled = true;
+
+          eraSelectionDiv.style.opacity = '0.4';
+          eraRadioButtons.forEach(rb => rb.disabled = true);
+        }
+      });
   </script>
 </body>
 </html>
