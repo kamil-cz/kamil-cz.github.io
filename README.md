@@ -30,7 +30,7 @@ Rogueal - https://ko-fi.com/rogueal
 * 0.3
     * Added Civilization choice per player
     * Added activation checkbox for Leader and Civ sliders
-    * Varius UI adjustments and fixes
+    * Various UI adjustments and fixes
 * 0.2
     * Initial Release
 
