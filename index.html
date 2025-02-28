@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NPEGPCPGB4"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-NPEGPCPGB4');
-  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Civ 7 Drafter. Tool that helps you with your multiplayer Civilization VII games.">
@@ -17,8 +9,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=content_copy" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=coffee" />
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  
+      <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NPEGPCPGB4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-NPEGPCPGB4');
+  </script>
   <style>
       body {
           background-color: #1E1E1E;
@@ -57,7 +57,7 @@
       }
 
       labelFoot {
-        margin-right: 10px;
+        margin-right: 5px;
         font-size: 12px;
       }
 
@@ -130,16 +130,15 @@
 
       .button-tnp {
           background: transparent;
+          width: 40px;
+          height: 40px;
           border: 2px solid rgba(255,255,255,0.2);
           color: #DDEDAA;
-          padding: 8px 8px;
-          font-size: 14px;
-          width: 100%;
           cursor: pointer;
-          border-top-left-radius: 9999px;
-          border-bottom-left-radius: 9999px;
-          border-top-right-radius: 9999px;
-          border-bottom-right-radius: 9999px;
+          border-top-left-radius: 5px;
+          border-bottom-left-radius: 5px;
+          border-top-right-radius: 5px;
+          border-bottom-right-radius: 5px;
       }
       .button-tnp:hover {
           background-color: #005F99;
@@ -181,6 +180,7 @@
       input[type=range] {
           width: 100%;
       }
+
 
       /* Styl dla sekcji zwijanej LEADERS */
       .collapsible-toggle {
@@ -303,9 +303,21 @@
 
       <div id="bottomFrame" style="display: flex; justify-content: space-between;">
         <div>
-          <button class="button-tnp" onclick="window.open('https://github.com/kamil-cz/kamil-cz.github.io', '_blank')" style="display: inline-block; width: 80px;">Github</button>
-          <button class="button-tnp" onclick="window.open('https://ko-fi.com/rogueal', '_blank')" style="display: inline-block; width: 80px;">Coffee</button>
-          <button class="button-tnp" onclick="window.open('https://discord.gg/NGnEvtAg', '_blank')" style="display: inline-block; width: 80px;">Discord</button>
+          <button class="button-tnp" onclick="window.open('https://github.com/kamil-cz/kamil-cz.github.io', '_blank')" style="display: inline-block;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
+            </svg>
+          </button>
+          <button class="button-tnp" onclick="window.open('https://ko-fi.com/rogueal', '_blank')" style="display: inline-block;">
+            <span class="material-symbols-outlined">
+              coffee
+            </span>
+          </button>
+          <button class="button-tnp" onclick="window.open('https://discord.gg/NGnEvtAg', '_blank')" style="display: inline-block;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-discord" viewBox="0 0 16 16">
+              <path d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2 12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.04.04 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05 0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8 8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019m-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612m5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612"/>
+            </svg>
+          </button>
         </div>
         <div style="display: flex; align-items: center; justify-content: center; color: #007ACC;">
           <labelFoot style="color: #DDEDAA;">2025 by rogueal</labelFoot>
@@ -354,7 +366,6 @@
       };
 
       // ------------------- CIVS PODZIELONE NA 3 EPOKI -------------------
-      // Dla przykładu wstawiamy po kilka cywilizacji do każdej epoki
       const baseCivs = {
         "Antiquity": {
           "Aksumite": "https://static.wikia.nocookie.net/civilization/images/8/8f/Aksumite_%28Civ7%29.png",
@@ -369,29 +380,29 @@
           "Roman": "https://static.wikia.nocookie.net/civilization/images/9/9f/Roman_%28Civ7%29.png"
         },
         "Exploration": {
-          "Abbasid": "https://static.wikia.nocookie.net/civilization/images/9/9c/Abbasid_%28Civ7%29.png/revision/latest?cb=20250215074957",
-          "Chola": "https://static.wikia.nocookie.net/civilization/images/6/61/Chola_%28Civ7%29.png/revision/latest?cb=20250215075135",
-          "Hawaiian": "https://static.wikia.nocookie.net/civilization/images/d/d9/Hawaiian_%28Civ7%29.png/revision/latest?cb=20250215074936",
-          "Incan": "https://static.wikia.nocookie.net/civilization/images/9/91/Incan_%28Civ7%29.png/revision/latest?cb=20250215074926",
-          "Majapahit": "https://static.wikia.nocookie.net/civilization/images/7/71/Majapahit_%28Civ7%29.png/revision/latest?cb=20250215074916",
-          "Ming": "https://static.wikia.nocookie.net/civilization/images/0/09/Ming_%28Civ7%29.png/revision/latest?cb=20250215074907",
-          "Mongolian": "https://static.wikia.nocookie.net/civilization/images/1/19/Mongolian_%28Civ7%29.png/revision/latest?cb=20250215074851",
-          "Norman": "https://static.wikia.nocookie.net/civilization/images/0/02/Norman_%28Civ7%29.png/revision/latest?cb=20250215074827",
-          "Shawnee": "https://static.wikia.nocookie.net/civilization/images/e/eb/Shawnee_%28Civ7%29.png/revision/latest?cb=20250215074751",
-          "Songhai": "https://static.wikia.nocookie.net/civilization/images/0/02/Songhai_%28Civ7%29.png/revision/latest?cb=20250215074815",
-          "Spanish": "https://static.wikia.nocookie.net/civilization/images/6/65/Spanish_%28Civ7%29.png/revision/latest?cb=20250215074800"
+          "Abbasid": "https://static.wikia.nocookie.net/civilization/images/9/9c/Abbasid_%28Civ7%29.png",
+          "Chola": "https://static.wikia.nocookie.net/civilization/images/6/61/Chola_%28Civ7%29.png",
+          "Hawaiian": "https://static.wikia.nocookie.net/civilization/images/d/d9/Hawaiian_%28Civ7%29.png",
+          "Incan": "https://static.wikia.nocookie.net/civilization/images/9/91/Incan_%28Civ7%29.png",
+          "Majapahit": "https://static.wikia.nocookie.net/civilization/images/7/71/Majapahit_%28Civ7%29.png",
+          "Ming": "https://static.wikia.nocookie.net/civilization/images/0/09/Ming_%28Civ7%29.png",
+          "Mongolian": "https://static.wikia.nocookie.net/civilization/images/1/19/Mongolian_%28Civ7%29.png",
+          "Norman": "https://static.wikia.nocookie.net/civilization/images/0/02/Norman_%28Civ7%29.png",
+          "Shawnee": "https://static.wikia.nocookie.net/civilization/images/e/eb/Shawnee_%28Civ7%29.png",
+          "Songhai": "https://static.wikia.nocookie.net/civilization/images/0/02/Songhai_%28Civ7%29.png",
+          "Spanish": "https://static.wikia.nocookie.net/civilization/images/6/65/Spanish_%28Civ7%29.png"
         },
         "Modern": {
-          "American": "https://static.wikia.nocookie.net/civilization/images/d/d6/American_%28Civ7%29.png/revision/latest?cb=20250215074738",
-          "Bugandan": "https://static.wikia.nocookie.net/civilization/images/1/13/Bugandan_%28Civ7%29.png/revision/latest?cb=20250215074727",
-          "French Imperial": "https://static.wikia.nocookie.net/civilization/images/a/a9/French_Imperial_%28Civ7%29.png/revision/latest?cb=20250215074717",
-          "Meiji Japanese": "https://static.wikia.nocookie.net/civilization/images/2/2e/Meiji_Japanese_%28Civ7%29.png/revision/latest?cb=20250215074708",
-          "Mexican": "https://static.wikia.nocookie.net/civilization/images/f/f6/Mexican_%28Civ7%29.png/revision/latest?cb=20250215074658",
-          "Mughal": "https://static.wikia.nocookie.net/civilization/images/5/5b/Mughal_%28Civ7%29.png/revision/latest?cb=20250215074646",
-          "Prussian": "https://static.wikia.nocookie.net/civilization/images/0/07/Prussian_%28Civ7%29.png/revision/latest?cb=20250215074632",
-          "Qing": "https://static.wikia.nocookie.net/civilization/images/6/69/Qing_%28Civ7%29.png/revision/latest?cb=20250215074622",
-          "Russian": "https://static.wikia.nocookie.net/civilization/images/a/a2/Russian_%28Civ7%29.png/revision/latest?cb=20250215074614",
-          "Siamese": "https://static.wikia.nocookie.net/civilization/images/e/e1/Siamese_%28Civ7%29.png/revision/latest?cb=20250215074605"
+          "American": "https://static.wikia.nocookie.net/civilization/images/d/d6/American_%28Civ7%29.png",
+          "Bugandan": "https://static.wikia.nocookie.net/civilization/images/1/13/Bugandan_%28Civ7%29.png",
+          "French Imperial": "https://static.wikia.nocookie.net/civilization/images/a/a9/French_Imperial_%28Civ7%29.png",
+          "Meiji Japanese": "https://static.wikia.nocookie.net/civilization/images/2/2e/Meiji_Japanese_%28Civ7%29.png",
+          "Mexican": "https://static.wikia.nocookie.net/civilization/images/f/f6/Mexican_%28Civ7%29.png",
+          "Mughal": "https://static.wikia.nocookie.net/civilization/images/5/5b/Mughal_%28Civ7%29.png",
+          "Prussian": "https://static.wikia.nocookie.net/civilization/images/0/07/Prussian_%28Civ7%29.png",
+          "Qing": "https://static.wikia.nocookie.net/civilization/images/6/69/Qing_%28Civ7%29.png",
+          "Russian": "https://static.wikia.nocookie.net/civilization/images/a/a2/Russian_%28Civ7%29.png",
+          "Siamese": "https://static.wikia.nocookie.net/civilization/images/e/e1/Siamese_%28Civ7%29.png"
         }
       };
 
