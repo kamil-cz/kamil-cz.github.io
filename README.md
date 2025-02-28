@@ -4,7 +4,7 @@ CIVPIK - The Civilization VII Drafter App
 
 ## Description
 
-Civpik helps you select a pool of leaders and civilizations for you Moltiplayer Civ games! 
+Civpik helps you select a pool of leaders and civilizations for you Multiplayer Civ games! 
 Select the number of players that joined your multiplayer civ 7 game. Choose if you want to select from a bag of leaders and/or civilizations to pick, and generate a random pool of results. You can easily copy the results to share them with your group. 
 
 ## Getting Started
