@@ -724,9 +724,11 @@
         crossroadsLeadersCheckbox.checked = selectAllLeadersCheckbox.checked;
       });
 
-      [deluxeLeadersCheckbox, foundersLeadersCheckbox].forEach(cb => {
+      [deluxeLeadersCheckbox, foundersLeadersCheckbox, crossroadsLeadersCheckbox].forEach(cb => {
         cb.addEventListener('change', () => {
-          if (!deluxeLeadersCheckbox.checked || !foundersLeadersCheckbox.checked) {
+          if (!deluxeLeadersCheckbox.checked || 
+            !foundersLeadersCheckbox.checked ||
+            !crossroadsLeadersCheckbox.checked) {
             selectAllLeadersCheckbox.checked = false;
           } else {
             selectAllLeadersCheckbox.checked = true;
