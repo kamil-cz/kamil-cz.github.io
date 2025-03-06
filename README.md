@@ -27,12 +27,14 @@ Rogueal - https://ko-fi.com/rogueal
 
 ## Version History
 
+* 0.3.1
+   * Added Crossroads of the World Collection - part 1
 * 0.3
-    * Added Civilization choice per player
-    * Added activation checkbox for Leader and Civ sliders
-    * Various UI adjustments and fixes
+   * Added Civilization choice per player
+   * Added activation checkbox for Leader and Civ sliders
+   * Various UI adjustments and fixes
 * 0.2
-    * Initial Release
+   * Initial Release
 
 ## License
 
