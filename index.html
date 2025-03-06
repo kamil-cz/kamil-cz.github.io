@@ -276,6 +276,10 @@
             <input type="checkbox" id="foundersLeaders" checked>
             Founders edition
           </label>
+          <label style="display: block;">
+            <input type="checkbox" id="crossroadsLeaders" checked>
+            Crossroads of the World
+          </label>
           <br>
           <label style="display: block;">--- Options ---</label>
           <label style="display: block;"><input type="checkbox" id="allowDuplicateLeaders"> Allow duplicate leaders</label>
@@ -320,7 +324,7 @@
         </div>
         <div style="display: flex; align-items: center; justify-content: center; color: #007ACC;">
           <labelFoot style="color: #DDEDAA;">2025 by rogueal</labelFoot>
-          <labelFoot style="color: #DDEDAA;">v0.3</labelFoot>
+          <labelFoot style="color: #DDEDAA;">v0.3.1</labelFoot>
         </div>
       </div>
   </div>
@@ -362,6 +366,10 @@
           "Himiko, High Shaman": "https://static.wikia.nocookie.net/civilization/images/1/15/Himiko%2C_High_Shaman_%28Civ7%29.png",
           "Friedrich, Baroque": "https://static.wikia.nocookie.net/civilization/images/6/60/Friedrich%2C_Baroque_%28Civ7%29.png",
           "Xerxes, The Achaemenid": "https://static.wikia.nocookie.net/civilization/images/d/d5/Xerxes%2C_the_Achaemenid_%28Civ7%29.png"
+      };
+
+      const crossroadsLeaders = {
+          "Ada Lovelace": "https://static.wikia.nocookie.net/civilization/images/1/15/Ada_Lovelace_%28Civ7%29.png"
       };
 
       // ------------------- CIVS PODZIELONE NA 3 EPOKI -------------------
@@ -423,6 +431,17 @@
         }
       };
 
+      const crossroadsCivs = {
+        "Antiquity": {
+          "Carthaginian": "https://static.wikia.nocookie.net/civilization/images/e/e6/Carthaginian_%28Civ7%29.png"
+        },
+        "Exploration": {
+        },
+        "Modern": {
+          "British": "https://static.wikia.nocookie.net/civilization/images/9/95/British_%28Civ7%29.png"
+        }
+      };
+
       // ----------------- GENEROWANIE WYNIKÓW -----------------
       function showResults() {
           const numPlayers = parseInt(document.getElementById('numPlayers').value);
@@ -441,6 +460,7 @@
           // Checkboxy na edycje/dodatki
           const includeDeluxeLeaders   = document.getElementById('deluxeLeaders').checked;
           const includeFoundersLeaders = document.getElementById('foundersLeaders').checked;
+          const includeCrossroadsLeaders = document.getElementById('crossroadsLeaders').checked;
 
           // Checkboxy duplikacji
           const allowDuplicateLeaders = document.getElementById('allowDuplicateLeaders').checked;
@@ -467,6 +487,7 @@
               availableLeaders = { ...baseLeaders };
               if (includeDeluxeLeaders)   availableLeaders = { ...availableLeaders, ...deluxeLeaders };
               if (includeFoundersLeaders) availableLeaders = { ...availableLeaders, ...foundersLeaders };
+              if (includeCrossroadsLeaders) availableLeaders = { ...availableLeaders, ...crossroadsLeaders };
           }
           const leaderKeys = Object.keys(availableLeaders);
 
@@ -482,6 +503,10 @@
               // founders
               if (includeFoundersLeaders && foundersCivs[chosenEra]) {
                 availableCivs = { ...availableCivs, ...foundersCivs[chosenEra] };
+              }
+              // crossroads
+              if (includeCrossroadsLeaders && crossroadsCivs[chosenEra]) {
+                availableCivs = { ...availableCivs, ...crossroadsCivs[chosenEra] };
               }
           }
           const civKeys = Object.keys(availableCivs);
