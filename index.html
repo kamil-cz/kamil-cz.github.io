@@ -716,10 +716,12 @@
       const selectAllLeadersCheckbox = document.getElementById('selectAllLeaders');
       const deluxeLeadersCheckbox   = document.getElementById('deluxeLeaders');
       const foundersLeadersCheckbox = document.getElementById('foundersLeaders');
+      const crossroadsLeadersCheckbox = document.getElementById('crossroadsLeaders');
 
       selectAllLeadersCheckbox.addEventListener('change', () => {
         deluxeLeadersCheckbox.checked   = selectAllLeadersCheckbox.checked;
         foundersLeadersCheckbox.checked = selectAllLeadersCheckbox.checked;
+        crossroadsLeadersCheckbox.checked = selectAllLeadersCheckbox.checked;
       });
 
       [deluxeLeadersCheckbox, foundersLeadersCheckbox].forEach(cb => {
